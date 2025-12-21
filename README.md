@@ -59,12 +59,8 @@ We provide an **interactive video comparison** (with sliding view) on our projec
   <a href="https://staceyxc.github.io/Yoda_videos/">
     <img src="https://img.shields.io/badge/🎥_View-Interactive_Video_Demos-2ea44f?style=for-the-badge&logo=github" alt="Video Demos">
   </a>
-  <br>
-  <br>
-  <a href="https://staceyxc.github.io/Yoda_videos/">
-    <strong>👉 Click here to compare YODA with Ground Truth 👈</strong>
-  </a>
 </div>
+
 ---
 
 ## 📂 Data Preparation
