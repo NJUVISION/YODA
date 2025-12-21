@@ -68,8 +68,9 @@ Below is a video reconstruction comparison against H.266/VVC (VTM) and DCVC-RT a
     <th width="50%">YODA (bpp 0.012)</th>
   </tr>
   <tr>
-    <td><video src="assets/videos/Beauty_original.mp4" style="width:100%" controls muted autoplay loop></video></td>
-    <td><video src="assets/videos/Beauty_yoda_0.012435.mp4" style="width:100%" controls muted autoplay loop></video></td>
+    <td><video src="https://github.com/user-attachments/assets/c2d79d0c-d204-4cde-99c9-ce702a8b308e" style="width:100%" controls muted autoplay loop></video></td>
+    <td><video src="https://github.com/user-attachments/assets/34d3b91e-ada9-4b06-bcbd-23c03b058cbb
+    " style="width:100%" controls muted autoplay loop></video></td>
   </tr>
 </table>
 
@@ -79,8 +80,10 @@ Below is a video reconstruction comparison against H.266/VVC (VTM) and DCVC-RT a
     <th width="50%">YODA (bpp 0.023)</th>
   </tr>
   <tr>
-    <td><video src="assets/videos/Kimono1_original.mp4" style="width:100%" controls muted autoplay loop></video></td>
-    <td><video src="assets/videos/Kimono1_yoda_0.023113.mp4" style="width:100%" controls muted autoplay loop></video></td>
+    <td><video src="https://github.com/user-attachments/assets/8ca3ba7e-e720-455b-b713-e3d3ed4909a0
+    " style="width:100%" controls muted autoplay loop></video></td>
+    <td><video src="https://github.com/user-attachments/assets/c16ce332-b44b-4404-a123-3de116e72c97
+    " style="width:100%" controls muted autoplay loop></video></td>
   </tr>
 </table>
 
