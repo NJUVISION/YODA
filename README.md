@@ -56,24 +56,39 @@ YODA demonstrates superior performance across multiple datasets (UVG, HEVC-B, MC
 
 Below is a video reconstruction comparison against H.266/VVC (VTM) and DCVC-RT across different scenarios:
 
-| Ground Truth (Original) | VTM-23.13 | **YODA (Ours)** |
+<!-- | Ground Truth (Original) | VTM-23.13 | **YODA (Ours)** |
 | :---: | :---: | :---: |
-| <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_sports_gt.mp4" width="100%" controls muted autoplay loop></video> | <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_sports_vtm.mp4" width="100%" controls muted autoplay loop></video> | <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_sports_yoda.mp4" width="100%" controls muted autoplay loop></video> |
-| *Raw Sequence* | *Blurry boundaries* | *Sharp structure preserved* |
+| <video src="https://github.com/NJUVISION/YODA/assets/videos/Beauty_original.mp4" width="100%" controls muted autoplay loop></video> | <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_sports_vtm.mp4" width="100%" controls muted autoplay loop></video> | <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_sports_yoda.mp4" width="100%" controls muted autoplay loop></video> |
+| *Raw Sequence* | *Blurry boundaries* | *Sharp structure preserved* | -->
 
 
-| Ground Truth (Original) | DCVC-RT | **YODA (Ours)** |
-| :---: | :---: | :---: |
-| <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_texture_gt.mp4" width="100%" controls muted autoplay loop></video> | <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_texture_dcvcrt.mp4" width="100%" controls muted autoplay loop></video> | <video src="https://github.com/NJUVISION/YODA/raw/main/assets/demo_texture_yoda.mp4" width="100%" controls muted autoplay loop></video> |
-| *Raw Sequence* | *Loss of fine details* | *Realistic texture synthesis* |
+<table width="100%">
+  <tr>
+    <th width="50%">Ground Truth (Original)</th>
+    <th width="50%">YODA (bpp 0.012)</th>
+  </tr>
+  <tr>
+    <td><video src="assets/videos/Beauty_original.mp4" style="width:100%" controls muted autoplay loop></video></td>
+    <td><video src="assets/videos/Beauty_yoda_0.012435.mp4" style="width:100%" controls muted autoplay loop></video></td>
+  </tr>
+</table>
 
-> **Note:** For the best viewing experience, please download the videos to check frame-by-frame details.
+<table width="100%">
+  <tr>
+    <th width="50%">Ground Truth (Original)</th>
+    <th width="50%">YODA (bpp 0.023)</th>
+  </tr>
+  <tr>
+    <td><video src="assets/videos/Kimono1_original.mp4" style="width:100%" controls muted autoplay loop></video></td>
+    <td><video src="assets/videos/Kimono1_yoda_0.023113.mp4" style="width:100%" controls muted autoplay loop></video></td>
+  </tr>
+</table>
 
 ---
 
 ## 📂 Data Preparation
 
-[cite_start]We utilized the [Vimeo-90K](http://toflow.csail.mit.edu/) dataset for training and evaluated our model on the **UVG**, **MCL-JCV**, and **HEVC Class B** datasets[cite: 313].
+We utilized the [Vimeo-90K](http://toflow.csail.mit.edu/) dataset for training and evaluated our model on the **UVG**, **MCL-JCV**, and **HEVC Class B** datasets.
 
 ---
 
