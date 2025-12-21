@@ -73,7 +73,7 @@ Below is a video reconstruction comparison against H.266/VVC (VTM) and DCVC-RT a
 
 ## 📂 Data Preparation
 
-[cite_start]We utilized the [Vimeo-90K](http://tce.i2r.a-star.edu.sg/vimeo90k.html) dataset for training and evaluated our model on the **UVG**, **MCL-JCV**, and **HEVC Class B** datasets[cite: 313].
+[cite_start]We utilized the [Vimeo-90K](http://toflow.csail.mit.edu/) dataset for training and evaluated our model on the **UVG**, **MCL-JCV**, and **HEVC Class B** datasets[cite: 313].
 
 ---
 
