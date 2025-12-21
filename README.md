@@ -31,7 +31,7 @@ While one-step diffusion models have excelled in image compression, applying the
 </div>
 <br>
 
-YODA proposes an end-to-end unified design consisting of three key components[cite: 132]:
+YODA proposes an end-to-end unified design consisting of three key components:
 
 * **Temporal-Aware AutoEncoder (TA-AE):** Extracts multiscale features from reference frames to generate a compact latent representation.
 * **Conditional Latent Coder (CLC):** Implicitly models motion within the feature space to perform efficient entropy coding.
