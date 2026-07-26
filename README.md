@@ -263,36 +263,49 @@ Adjust the fields according to the configuration format used by `test_video_YODA
 
 ## Running Inference
 
-Set the required paths through environment variables:
+The following command provides an example for evaluating YODA on the HEVC Class B dataset:
 
 ```bash
-export SD_PATH=/path/to/sana-sprint
-export PRETRAINED_WEIGHTS=/path/to/yoda_video.pth
-export PRETRAINED_I_WEIGHTS=/path/to/yoda_intra.pth
-export PROMPT_EMBEDS_PATH=/path/to/prompt_embeds.pt
-export PROMPT_ATTENTION_MASK_PATH=/path/to/prompt_attention_mask.pt
-export TEST_CONFIG=/path/to/config_test.json
-export OUTPUT_PATH=./eval/output.json
-export CUDA_DEVICE=0
+CUDA_VISIBLE_DEVICES=0 python test_video_YODA.py \
+    --pretrained_weights /path/to/yoda_video.pth \
+    --pretrained_i_weights /path/to/yoda_intra.pth \
+    --prompt_attention_mask_path /path/to/prompt_attention_mask.pt \
+    --prompt_embeds /path/to/prompt_embeds.pt \
+    --lora_rank_transformer 72 \
+    --test_config ./config_hevc_B.json \
+    --save_decoded_frame True \
+    --cuda 1 \
+    -w 1 \
+    --timestep 100 \
+    --timestep_i 999 \
+    --write_stream 1 \
+    --output_path ./output.json \
+    --cuda_idx 0 \
+    --check_existing 0 \
+    --rate_num 1 \
+    --qp_p 0 \
+    --qp_i 0 \
+    --force_intra_period 1000 \
+    --calc_ssim True \
+    --lora_rank_transformer_video 72 \
+    --reset_interval 1000 \
+    --sd_path /path/to/sana_sprint_0.6b_1024 \
+    --run_fast True
 ```
 
-Run the default evaluation pipeline:
+Replace the checkpoint, prompt tensor, SANA-Sprint, and dataset configuration paths with the corresponding local paths.
 
-```bash
-bash test.sh
-```
+In this example:
 
-Additional arguments are forwarded to `test_video_YODA.py`:
+* `--pretrained_weights` specifies the YODA inter-frame checkpoint.
+* `--pretrained_i_weights` specifies the YODA intra-frame checkpoint.
+* `--sd_path` specifies the local SANA-Sprint model directory.
+* `--test_config` specifies the dataset configuration file.
+* `--qp_p` and `--qp_i` select the rate points for inter and intra frames, respectively.
+* `--save_decoded_frame True` saves reconstructed frames for subsequent quality evaluation.
+* `--write_stream 1` enables bitstream generation.
+* `-w 1` uses one worker process.
 
-```bash
-bash test.sh \
-  --force_intra_period 32 \
-  --save_decoded_frame false
-```
-
-Generated bitstreams and reconstructed frames are written to the output directory configured by the script.
-
----
 
 ## Evaluating Reconstructed Videos
 
@@ -326,61 +339,6 @@ python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda
 
 ---
 
-## Troubleshooting
-
-### `ModuleNotFoundError: No module named 'pybind11'`
-
-Install `pybind11` in the current environment and disable build isolation:
-
-```bash
-python -m pip install -U pybind11 setuptools wheel
-python -m pip install -e ./src/cpp --no-build-isolation
-```
-
-### `Cannot copy out of meta tensor`
-
-The model was initialized using meta tensors, but the checkpoint weights were not assigned to the model parameters. Check that checkpoint loading uses:
-
-```python
-model.load_state_dict(state_dict, assign=True)
-```
-
-Do not replace `.to(device)` with `.to_empty(device=device)` unless the complete model weights are loaded afterward.
-
-### CPU and CUDA tensors are mixed
-
-Ensure all tensors passed to the Transformer are on the same device:
-
-```python
-encoder_hidden_states = encoder_hidden_states.to(
-    device=next(transformer.parameters()).device,
-    dtype=next(transformer.parameters()).dtype,
-)
-```
-
-### `no kernel image is available for execution on the device`
-
-The installed PyTorch binary does not support the compute capability of the current GPU. Install a PyTorch build compiled for the relevant CUDA architecture.
-
-### CUDA extension is unavailable
-
-If the following message appears:
-
-```text
-cannot import cuda implementation for inference, fallback to pytorch
-```
-
-confirm that:
-
-1. The correct Conda environment is active.
-2. The native extension was compiled under the same Python version.
-3. The extension is importable:
-
-```bash
-python -c "import MLCodec_extensions_cpp; print(MLCodec_extensions_cpp.__file__)"
-```
-
----
 
 ## Acknowledgments
 
@@ -416,17 +374,3 @@ Users are responsible for complying with the licenses and terms of all third-par
 
 ---
 
-## Release Checklist
-
-Before the public release:
-
-* [ ] Replace the YODA checkpoint placeholders with the official Hugging Face links.
-* [ ] Upload the inter-frame and intra-frame checkpoints.
-* [ ] Upload or document the required prompt tensors.
-* [ ] Provide an example test configuration.
-* [ ] Pin the dependency versions used for the reported experiments.
-* [ ] Confirm that the native extension builds in a clean Python 3.10 environment.
-* [ ] Verify inference on all reported test datasets.
-* [ ] Verify the commands and paths in this README.
-* [ ] Confirm third-party license compatibility.
-* [ ] Add the final publication information when available.
