@@ -7,73 +7,426 @@
 **Nanjing University**
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://staceyxc.github.io/Yoda_videos/)
+[![Paper](https://img.shields.io/badge/Paper-IEEE%20TCSVT-red.svg)](#citation)
+
 </div>
 
 ---
 
-## 📢 Introduction
+## Introduction
 
-**YODA** is a novel neural video codec designed to achieve extreme perceptual quality with efficient inference speed.
+**YODA** is a learned video compression framework designed to achieve high perceptual reconstruction quality with efficient one-step diffusion inference.
 
-While one-step diffusion models have excelled in image compression, applying them to video remains a challenge. YODA overcomes the limitations of traditional methods and existing deep learning baselines by introducing a **One-step Diffusion Transformer** and a **Temporal-Awareness** mechanism.
+While one-step diffusion models have demonstrated strong performance in image compression, extending them to video remains challenging because of temporal redundancy, error propagation, and inference complexity. YODA addresses these challenges through an end-to-end architecture that combines a **Temporal-Aware AutoEncoder**, a **Conditional Latent Coder**, and a lightweight **one-step linear Diffusion Transformer**.
 
-**Core Highlights:**
-* **Perceptual Quality:** YODA consistently outperforms H.266/VVC and SOTA neural codecs (such as DCVC-RT and PLVC) on perceptual metrics including LPIPS, DISTS, FID, and KID.
-* **One-Step Denoising:** Utilizing a lightweight linear DiT model, YODA performs denoising in a single step, significantly reducing the inference latency associated with diffusion models.
-* **Temporal-Aware Design:** Unlike prior efforts that rely on frozen 2D autoencoders, YODA employs a trainable Temporal-Aware AutoEncoder (TA-AE) to fully exploit inter-frame correlations.
+### Highlights
+
+* **High perceptual quality:** YODA outperforms H.266/VVC and representative learned video codecs on perceptual metrics including LPIPS, DISTS, FID, and KID.
+* **One-step denoising:** A lightweight linear DiT performs denoising in a single inference step, avoiding the high latency of iterative diffusion sampling.
+* **Temporal-aware representation:** The trainable Temporal-Aware AutoEncoder explicitly exploits temporal information from reference frames instead of relying on a frozen image autoencoder.
+* **End-to-end video compression:** Temporal representation learning, latent coding, and perceptual reconstruction are optimized within a unified framework.
+
+This repository provides the public **inference, bitstream generation, reconstruction, and evaluation pipeline** for YODA. Training and experiment-only code are not included.
 
 ---
 
-## 🚀 Framework
+## Framework
 
 <div align="center">
-  <img src="assets/framework.png" width="800" alt="YODA Framework"/>
+  <img src="assets/framework.png" width="800" alt="YODA framework">
 </div>
-<br>
 
-YODA proposes an end-to-end unified design consisting of three key components:
+YODA consists of three main components:
 
-* **Temporal-Aware AutoEncoder (TA-AE):** Extracts multiscale features from reference frames to generate a compact latent representation.
-* **Conditional Latent Coder (CLC):** Implicitly models motion within the feature space to perform efficient entropy coding.
-* **Linear DiT Model:** Adopts a linear DiT for efficient one-step denoising.
+* **Temporal-Aware AutoEncoder (TA-AE):** Extracts multiscale temporal features from previously reconstructed frames and produces a compact latent representation.
+* **Conditional Latent Coder (CLC):** Models temporal dependencies and performs entropy coding in the latent feature space.
+* **Linear DiT Model:** Refines the decoded latent representation through efficient one-step diffusion denoising.
+
 ---
 
-## 🏆 Performance
+## Performance
 
-YODA demonstrates superior performance across multiple datasets (UVG, HEVC-B, MCL-JCV), surpassing both traditional standards (VTM) and recent neural video codecs (DCVC-RT, DiffVC, PLVC)
-
+YODA is evaluated on the **UVG**, **HEVC Class B**, and **MCL-JCV** datasets. It achieves strong perceptual rate–distortion performance compared with traditional video coding standards and recent learned video compression methods.
 
 <div align="center">
-  <img src="assets/metrics.png" width="95%" alt="Perceptual Quality RD Curves (LPIPS, DISTS, FID, KID)"/>
-<p><i>Figure: Perceptual quality performance comparisons on UVG, HEVC-B, and MCL-JCV datasets. Lower is better.</i></p>
-  
-  <br>
+  <img src="assets/metrics.png" width="95%" alt="Perceptual quality rate-distortion curves">
+
+  <p>
+    <i>
+      Perceptual quality comparisons on UVG, HEVC Class B, and MCL-JCV.
+      Lower values are better for LPIPS, DISTS, FID, and KID.
+    </i>
+  </p>
 </div>
 
 ---
-## 👁️ Visual Comparison
 
-We provide an **interactive video comparison** (with sliding view) on our project page to demonstrate the visual reconstruction quality of **YODA** against the **Ground Truth**.
+## Visual Comparison
+
+Interactive comparisons between YODA reconstructions and the corresponding ground-truth videos are available on the project page.
 
 <div align="center">
   <a href="https://staceyxc.github.io/Yoda_videos/">
-    <img src="https://img.shields.io/badge/🎥_View-Interactive_Video_Demos-2ea44f?style=for-the-badge&logo=github" alt="Video Demos">
+    <img src="https://img.shields.io/badge/View-Interactive_Video_Demos-2ea44f?style=for-the-badge&logo=github" alt="Interactive video comparisons">
   </a>
 </div>
 
 ---
 
-## 📂 Data Preparation
+## Repository Layout
 
-We utilized the [Vimeo-90K](http://toflow.csail.mit.edu/) dataset for training and evaluated our model on the **UVG**, **MCL-JCV**, and **HEVC Class B** datasets.
+```text
+.
+├── assets/                    # Figures and README assets
+├── ckpts/                     # Local checkpoints, ignored by Git
+├── src/                       # Codec and neural-network modules
+│   └── cpp/                   # Native entropy-coding extension
+├── utils/                     # Shared inference utilities
+├── test.sh                    # Reproducible inference entry point
+├── test_video_YODA.py         # Video coding and bitstream generation
+├── eval.py                    # Reconstruction-quality evaluation
+├── requirements.txt           # Python dependencies
+└── README.md
+```
 
 ---
 
-## 🤝 Acknowledgment
+## Requirements
 
-We thank the authors of the following projects for their pioneering contributions and open-source efforts:
+The released inference pipeline requires:
 
-* **[DCVC-RT](https://github.com/microsoft/DCVC)**: Towards Practical Real-time Neural Video Compression.
-* **[SANA](https://github.com/NVlabs/SANA)**: Efficient High-Resolution Image Synthesis with Linear Diffusion Transformers.
-* **[DC-AE](https://hanlab.mit.edu/projects/dc-ae)**: Deep Compression Autoencoder.
+* Linux with Bash
+* Python 3.10
+* A CUDA-capable NVIDIA GPU
+* A PyTorch build compatible with the installed GPU and CUDA driver
+* Conda or another Python environment manager
 
+Python 3.10 is recommended because the native entropy-coding extension is compiled for the active Python environment.
+
+---
+
+## Environment Installation
+
+### 1. Create the Conda environment
+
+```bash
+conda create -n yoda python=3.10 -y
+conda activate yoda
+```
+
+Confirm that the correct environment is active:
+
+```bash
+which python
+python --version
+```
+
+### 2. Install Python dependencies
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+The default PyTorch package in `requirements.txt` may not match every GPU or CUDA setup. When necessary, install an appropriate CUDA-enabled PyTorch build using the [official PyTorch installation guide](https://pytorch.org/get-started/locally/), and then install the remaining dependencies.
+
+For newer GPU architectures, verify that the installed PyTorch build contains the corresponding CUDA compute capability:
+
+```bash
+python - <<'PY'
+import torch
+
+print("PyTorch:", torch.__version__)
+print("PyTorch CUDA:", torch.version.cuda)
+print("CUDA available:", torch.cuda.is_available())
+
+if torch.cuda.is_available():
+    print("GPU:", torch.cuda.get_device_name(0))
+    print("GPU capability:", torch.cuda.get_device_capability(0))
+    print("Compiled CUDA architectures:", torch.cuda.get_arch_list())
+PY
+```
+
+### 3. Build the native entropy coder
+
+Install the C++ extension from the repository root:
+
+```bash
+python -m pip install -U pybind11 setuptools wheel
+python -m pip install -e ./src/cpp --no-build-isolation
+```
+
+The `--no-build-isolation` option allows the build process to use the `pybind11` package installed in the current Conda environment.
+
+Verify the installation:
+
+```bash
+python -c "import MLCodec_extensions_cpp; print('Entropy coder: OK')"
+```
+
+---
+
+## Checkpoints and Configuration
+
+YODA inference requires:
+
+1. The pretrained SANA-Sprint model.
+2. The YODA inter-frame codec checkpoint.
+3. The YODA intra-frame codec checkpoint.
+4. Cached prompt embeddings and attention masks.
+5. A dataset configuration file.
+
+### 1. Download SANA-Sprint
+
+Download the pretrained
+[SANA-Sprint checkpoint](https://huggingface.co/Efficient-Large-Model/Sana_Sprint_0.6B_1024px_diffusers/tree/main)
+from Hugging Face.
+
+The downloaded model directory should contain at least:
+
+```text
+sana-sprint/
+├── scheduler/
+├── transformer/
+└── vae/
+```
+
+### 2. Download YODA checkpoints
+
+Both the inter-frame and intra-frame checkpoints are available from the [YODA Hugging Face repository](https://huggingface.co/staceylee/YODA/tree/main).
+
+| Checkpoint            | Description                         | Download                                                        |
+| --------------------- | ----------------------------------- | --------------------------------------------------------------- |
+| YODA video checkpoint | Inter-frame video compression model | [Hugging Face](https://huggingface.co/staceylee/YODA/tree/main) |
+| YODA intra checkpoint | Intra-frame compression model       | [Hugging Face](https://huggingface.co/staceylee/YODA/tree/main) |
+
+The checkpoints may be stored anywhere outside the Git repository. The local `ckpts/` directory is ignored by Git and can optionally be used to organize the downloaded model files.
+
+
+A recommended directory structure is:
+
+```text
+checkpoints/
+├── sana-sprint/
+│   ├── scheduler/
+│   ├── transformer/
+│   └── vae/
+├── yoda_video.pth
+├── yoda_intra.pth
+├── prompt_embeds.pt
+└── prompt_attention_mask.pt
+```
+
+---
+
+## Data Preparation
+
+YODA was trained using the [Vimeo-90K](http://toflow.csail.mit.edu/) dataset and evaluated on:
+
+* UVG
+* HEVC Class B
+* MCL-JCV
+
+The source sequences should be prepared according to the format specified in the test configuration file.
+
+The configuration file defines:
+
+* Dataset root
+* Sequence names
+* Frame width and height
+* Number of frames
+* Frame rate
+* Source format
+* Intra period and evaluation settings
+
+An example configuration structure is:
+
+```json
+{
+  "root_path": "/path/to/dataset",
+  "sequences": [
+    {
+      "name": "SequenceName",
+      "width": 1920,
+      "height": 1080,
+      "frames": 96,
+      "format": "yuv420"
+    }
+  ]
+}
+```
+
+Adjust the fields according to the configuration format used by `test_video_YODA.py`.
+
+---
+
+## Running Inference
+
+Set the required paths through environment variables:
+
+```bash
+export SD_PATH=/path/to/sana-sprint
+export PRETRAINED_WEIGHTS=/path/to/yoda_video.pth
+export PRETRAINED_I_WEIGHTS=/path/to/yoda_intra.pth
+export PROMPT_EMBEDS_PATH=/path/to/prompt_embeds.pt
+export PROMPT_ATTENTION_MASK_PATH=/path/to/prompt_attention_mask.pt
+export TEST_CONFIG=/path/to/config_test.json
+export OUTPUT_PATH=./eval/output.json
+export CUDA_DEVICE=0
+```
+
+Run the default evaluation pipeline:
+
+```bash
+bash test.sh
+```
+
+Additional arguments are forwarded to `test_video_YODA.py`:
+
+```bash
+bash test.sh \
+  --force_intra_period 32 \
+  --save_decoded_frame false
+```
+
+Generated bitstreams and reconstructed frames are written to the output directory configured by the script.
+
+---
+
+## Evaluating Reconstructed Videos
+
+After generating reconstructed videos, use `eval.py` to calculate quality metrics.
+
+Example for HEVC Class B:
+
+```bash
+python eval.py \
+  --orig_dir /path/to/HEVC_test_sequences/ClassB/ \
+  --recon_dirs ./out_bin/HEVC_B \
+  --width 1920 \
+  --height 1080 \
+  --num_frames 96 \
+  --log_dir ./Log
+```
+
+The evaluation script reports metrics including:
+
+* Bits per pixel
+* PSNR
+* MS-SSIM
+* LPIPS
+* DISTS
+
+Before running GPU evaluation, confirm that the active Python environment uses a PyTorch build compatible with the installed GPU:
+
+```bash
+python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.get_arch_list())"
+```
+
+---
+
+## Troubleshooting
+
+### `ModuleNotFoundError: No module named 'pybind11'`
+
+Install `pybind11` in the current environment and disable build isolation:
+
+```bash
+python -m pip install -U pybind11 setuptools wheel
+python -m pip install -e ./src/cpp --no-build-isolation
+```
+
+### `Cannot copy out of meta tensor`
+
+The model was initialized using meta tensors, but the checkpoint weights were not assigned to the model parameters. Check that checkpoint loading uses:
+
+```python
+model.load_state_dict(state_dict, assign=True)
+```
+
+Do not replace `.to(device)` with `.to_empty(device=device)` unless the complete model weights are loaded afterward.
+
+### CPU and CUDA tensors are mixed
+
+Ensure all tensors passed to the Transformer are on the same device:
+
+```python
+encoder_hidden_states = encoder_hidden_states.to(
+    device=next(transformer.parameters()).device,
+    dtype=next(transformer.parameters()).dtype,
+)
+```
+
+### `no kernel image is available for execution on the device`
+
+The installed PyTorch binary does not support the compute capability of the current GPU. Install a PyTorch build compiled for the relevant CUDA architecture.
+
+### CUDA extension is unavailable
+
+If the following message appears:
+
+```text
+cannot import cuda implementation for inference, fallback to pytorch
+```
+
+confirm that:
+
+1. The correct Conda environment is active.
+2. The native extension was compiled under the same Python version.
+3. The extension is importable:
+
+```bash
+python -c "import MLCodec_extensions_cpp; print(MLCodec_extensions_cpp.__file__)"
+```
+
+---
+
+## Acknowledgments
+
+We thank the authors of the following projects for their contributions and open-source implementations:
+
+* [DCVC-RT](https://github.com/microsoft/DCVC): Towards Practical Real-Time Neural Video Compression.
+* [SANA](https://github.com/NVlabs/SANA): Efficient High-Resolution Image Synthesis with Linear Diffusion Transformers.
+* [DC-AE](https://hanlab.mit.edu/projects/dc-ae): Deep Compression Autoencoder.
+
+---
+
+## Citation
+
+The citation information will be updated when the final IEEE Xplore record becomes available.
+
+```bibtex
+@article{li2026yoda,
+  title   = {YODA: Yet Another One-step Diffusion-based Video Compressor},
+  author  = {Li, Xingchen and Zhang, Junzhe and Shi, Junqi and Lu, Ming and Ma, Zhan},
+  journal = {IEEE Transactions on Circuits and Systems for Video Technology},
+  year    = {2026},
+  doi     = {10.1109/TCSVT.2026.3714453}
+}
+```
+
+---
+
+## License
+
+This repository is released under the [Apache License 2.0](LICENSE).
+
+Users are responsible for complying with the licenses and terms of all third-party models, datasets, and adapted components, including SANA, DC-AE, and DCVC-RT.
+
+---
+
+## Release Checklist
+
+Before the public release:
+
+* [ ] Replace the YODA checkpoint placeholders with the official Hugging Face links.
+* [ ] Upload the inter-frame and intra-frame checkpoints.
+* [ ] Upload or document the required prompt tensors.
+* [ ] Provide an example test configuration.
+* [ ] Pin the dependency versions used for the reported experiments.
+* [ ] Confirm that the native extension builds in a clean Python 3.10 environment.
+* [ ] Verify inference on all reported test datasets.
+* [ ] Verify the commands and paths in this README.
+* [ ] Confirm third-party license compatibility.
+* [ ] Add the final publication information when available.
