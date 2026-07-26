@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://staceyxc.github.io/Yoda_videos/)
-[![Paper](https://img.shields.io/badge/Paper-IEEE%20TCSVT-red.svg)]([#citation](https://ieeexplore.ieee.org/document/11614008))
+[![Paper](https://img.shields.io/badge/Paper-IEEE%20TCSVT-red.svg)](https://ieeexplore.ieee.org/document/11614008)
 
 </div>
 
@@ -283,8 +283,6 @@ CUDA_VISIBLE_DEVICES=0 python test_video_YODA.py \
     --cuda_idx 0 \
     --check_existing 0 \
     --rate_num 1 \
-    --qp_p 0 \
-    --qp_i 0 \
     --force_intra_period 1000 \
     --calc_ssim True \
     --lora_rank_transformer_video 72 \
@@ -295,16 +293,18 @@ CUDA_VISIBLE_DEVICES=0 python test_video_YODA.py \
 
 Replace the checkpoint, prompt tensor, SANA-Sprint, and dataset configuration paths with the corresponding local paths.
 
+> **Memory requirement:** Full-precision inference on 1080p video may require more than 24 GB of GPU memory. The actual memory consumption depends on the input resolution, model configuration, inference implementation, and software environment. A GPU with more than 24 GB of memory is recommended for full-precision 1080p evaluation.
+
 In this example:
 
 * `--pretrained_weights` specifies the YODA inter-frame checkpoint.
 * `--pretrained_i_weights` specifies the YODA intra-frame checkpoint.
 * `--sd_path` specifies the local SANA-Sprint model directory.
 * `--test_config` specifies the dataset configuration file.
-* `--qp_p` and `--qp_i` select the rate points for inter and intra frames, respectively.
 * `--save_decoded_frame True` saves reconstructed frames for subsequent quality evaluation.
 * `--write_stream 1` enables bitstream generation.
 * `-w 1` uses one worker process.
+
 
 
 ## Evaluating Reconstructed Videos
@@ -331,12 +331,6 @@ The evaluation script reports metrics including:
 * LPIPS
 * DISTS
 
-Before running GPU evaluation, confirm that the active Python environment uses a PyTorch build compatible with the installed GPU:
-
-```bash
-python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.get_arch_list())"
-```
-
 ---
 
 
@@ -347,7 +341,7 @@ We thank the authors of the following projects for their contributions and open-
 * [DCVC-RT](https://github.com/microsoft/DCVC): Towards Practical Real-Time Neural Video Compression.
 * [SANA](https://github.com/NVlabs/SANA): Efficient High-Resolution Image Synthesis with Linear Diffusion Transformers.
 * [DC-AE](https://hanlab.mit.edu/projects/dc-ae): Deep Compression Autoencoder.
-
+* [StableCodec](https://github.com/LuizScarlet/StableCodec): StableCodec: Taming One-Step Diffusion for Extreme Image Compression.
 ---
 
 ## Citation
@@ -355,13 +349,16 @@ We thank the authors of the following projects for their contributions and open-
 The citation information will be updated when the final IEEE Xplore record becomes available.
 
 ```bibtex
-@article{li2026yoda,
-  title   = {YODA: Yet Another One-step Diffusion-based Video Compressor},
-  author  = {Li, Xingchen and Zhang, Junzhe and Shi, Junqi and Lu, Ming and Ma, Zhan},
-  journal = {IEEE Transactions on Circuits and Systems for Video Technology},
-  year    = {2026},
-  doi     = {10.1109/TCSVT.2026.3714453}
-}
+@ARTICLE{11614008,
+  author={Li, Xingchen and Zhang, Junzhe and Shi, Junqi and Lu, Ming and Ma, Zhan},
+  journal={IEEE Transactions on Circuits and Systems for Video Technology}, 
+  title={YODA: Yet Another One-step Diffusion-based Video Compressor}, 
+  year={2026},
+  volume={},
+  number={},
+  pages={1-1},
+  keywords={Modeling;Videos;Noise reduction;Decoding;Codes;Encoding;LoRa;Training;Conferences;High efficiency video coding;Temporal Awareness;Conditional Coding;Diffusion Transformer;Video Compression},
+  doi={10.1109/TCSVT.2026.3714453}}
 ```
 
 ---
