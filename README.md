@@ -283,7 +283,7 @@ CUDA_VISIBLE_DEVICES=0 python test_video_YODA.py \
     --cuda_idx 0 \
     --check_existing 0 \
     --rate_num 1 \
-    --force_intra_period 1000 \
+    --force_intra_period 32 \
     --calc_ssim True \
     --lora_rank_transformer_video 72 \
     --reset_interval 1000 \
