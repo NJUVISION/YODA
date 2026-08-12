@@ -8,7 +8,8 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://staceyxc.github.io/Yoda_videos/)
-[![Paper](https://img.shields.io/badge/Paper-IEEE%20TCSVT-red.svg)](https://ieeexplore.ieee.org/document/11614008)
+[![Paper](https://img.shields.io/badge/Paper-TCSVT%20%7C%20arXiv%202601.01141-red.svg)](https://arxiv.org/abs/2601.01141)
+
 
 </div>
 
